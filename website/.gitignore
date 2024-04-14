@@ -3,4 +3,4 @@
 .DSStore
 __pycache__/
 config.py
-website/_pycache/
+website/__pycache__/
