@@ -41,12 +41,21 @@ def sign_up():
         password2 = request.form.get('password2')
         user = Users.query.filter_by(Email=email).first()
 
-        new_user = Users(Email=email, Username=Username, PasswordHash=password1,  RegistrationDate=datetime.utcnow(), UserRole = "Regular")
+        if len(email) < 4:
+            flash('Email must be greater than 3 characters.', category='error')
+        elif len(Username) < 2:
+            flash('First name must be greater than 1 character.', category='error')
+        elif password1 != password2:
+            flash('Passwords don\'t match.', category='error')
+        elif len(password1) < 3:
+            flash('Password must be at least 3 characters.', category='error')
+        else:
+            new_user = Users(Email=email, Username=Username, PasswordHash=password1,  RegistrationDate=datetime.utcnow(), UserRole = "Regular")
 
-        db.session.add(new_user)
-        db.session.commit()
-        login_user(new_user, remember=True)
-        flash('Account created!', category='success')
-        return render_template("sign-up.html")
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user, remember=True)
+            flash('Account created!', category='success')
+            return render_template("sign-up.html")
 
     return render_template("sign-up.html")
