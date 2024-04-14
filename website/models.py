@@ -5,7 +5,7 @@ from sqlalchemy import Enum, ForeignKey, Integer, String, DateTime, Text
 from sqlalchemy.orm import relationship
 from .extensions import db
 from datetime import datetime
-
+from flask_login import UserMixin
 
 class UserRoleEnum(enum.Enum):
     Admin = "Admin"
@@ -13,7 +13,7 @@ class UserRoleEnum(enum.Enum):
     Regular = "Regular"
 
 
-class Users(db.Model):
+class Users(db.Model, UserMixin):
     __tablename__ = 'users'
     UserID = db.Column(db.Integer, primary_key=True)
     Username = db.Column(db.String)
@@ -22,6 +22,10 @@ class Users(db.Model):
     UserRole = db.Column(Enum(UserRoleEnum))
     RegistrationDate = db.Column(db.DateTime)
     DeletedAt = db.Column(db.DateTime)
+
+    def get_id(self):
+        return str(self.UserID)
+
 
 
 class Inventory(db.Model):
