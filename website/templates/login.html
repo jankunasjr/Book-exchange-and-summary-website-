@@ -1,71 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link
-            rel="stylesheet"
-            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-            crossorigin="anonymous"
-    />
-    <link
-            rel="stylesheet"
-            href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-            crossorigin="anonymous"
-    />
-    <style>
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 15px;
-            }
-            .navbar-brand {
-                font-size: 18px;
-            }
-            .nav-item {
-                font-size: 14px;
-            }
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
 
-        }
-    </style>
-    <title>{% block title %}Home{% endblock %}</title>
-</head>
-<body>
-{% if request.path != '/login' and request.path != '/sign-up' %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/">Knygų Šaltinis</a>
-    <button class="navbar-toggler" type=button data-toggle="collapse" data-target="#navbar">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbar">
-        <div class="navbar-nav">
-            <a class="nav-item nav-link" id="home" href="/">Home</a>
-            <a class="nav-item nav-link" id="your-books" href="/your-books">Your Books</a>
-            <a class="nav-item nav-link" id="summary-generator" href="/summary-generator">Summary Generator</a>
-            <a class="nav-item nav-link" id="book-trading" href="/book-trading">Book Trading</a>
+{% block content %}
+<div class="background">
+<div class="login-container">
+    <div class="logo-container">
+            <img src="{{ url_for('static', filename='logo.jpeg') }}" alt="Logotype" class="logo">
+    </div>
+    <div class="form-container">
+            <form method="POST">
+                <h3 class="text-center">Log in</h3>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">Log in</button>
+                </div>
+                <div class="form-group text-center">
+                    <a href="/sign-up" style="margin-top: 10px;">Register</a>
+                </div>
+            </form>
         </div>
     </div>
-</nav>
-{% endif %}
-
-<div class="container">
-    {% block content %}
-    {% endblock %}
 </div>
-<script
-        src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"
-></script>
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"
-></script>
-<script
-        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"
-></script>
-</body>
-</html>
+    <style>
+
+    .background {
+    
+  }
+
+    .login-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.logo-container {
+    width: 100%;
+}
+
+.logo {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    width: 100%;
+    padding-left: 0;
+}
+
+@media (min-width: 769px) {
+    .login-container {
+        flex-direction: row;
+    }
+
+    .logo-container {
+        width: 70%;
+    }
+
+    .form-container {
+        width: 30%;
+        padding-left: 30px;
+    }
+}
+    </style>
+{% endblock %}

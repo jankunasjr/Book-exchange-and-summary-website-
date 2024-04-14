@@ -1,0 +1,6 @@
+.idea/*
+.venv/
+.DSStore
+pycache/
+config.py
+website/_pycache/
