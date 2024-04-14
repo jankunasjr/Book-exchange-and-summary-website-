@@ -2,25 +2,72 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-    <form method="POST">
-        <h3 align="center">Sign Up</h3>
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+<div class="signup-container">
+    <div class="logo-container">
+            <img src="{{ url_for('static', filename='logo.jpeg') }}" alt="Image description" class="logo">
+</div>
+    <div class="form-container">
+            <form method="POST">
+                <h3 class="text-center">Sign Up</h3>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+                </div>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name">
+                </div>
+                <div class="form-group">
+                    <label for="password1">Password</label>
+                    <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter password">
+                </div>
+                <div class="form-group">
+                    <label for="password2">Password (confirm)</label>
+                    <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm password">
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                <div class="form-group text-center">
+                    <a href="/login" style="margin-top: 10px;">Log in</a>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="firstName">First Name</label>
-            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name">
-        </div>
-        <div class="form-group">
-            <label for="password1">Password</label>
-            <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter password">
-        </div>
-        <div class="form-group">
-            <label for="password2">Password (confirm)</label>
-            <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm password">
-        </div>
-    <br />
-    <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-{% endblock %}
+    </div>
+    <style>
+    .signup-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.logo-container {
+    width: 100%;
+}
+
+.logo {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    width: 100%;
+    padding-left: 0;
+}
+
+@media (min-width: 769px) {
+    .signup-container {
+        flex-direction: row;
+    }
+
+    .logo-container {
+        width: 70%;
+    }
+
+    .form-container {
+        width: 30%;
+        padding-left: 30px;
+    }
+}
+    </style>
+    {% endblock %}
