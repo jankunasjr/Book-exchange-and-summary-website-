@@ -20,6 +20,41 @@ prompt_template = PromptTemplate(template="Question: {question}\nAnswer:", input
 llm_chain = LLMChain(prompt=prompt_template, llm=llm)
 
 
+def process_text_input(text, prompt_id):
+    response = llm_chain.run(question=text)
+    save_prompt_message(text, response, prompt_id)
+
+
+def process_file(path, filename, user_id, prompt_id):
+    content = read_file(path)
+    response = llm_chain.run(question=content)
+    save_file_record(filename, path, user_id, prompt_id)
+    save_prompt_message(content, response, prompt_id)
+
+
+def read_file(path):
+    if path.endswith('.pdf'):
+        reader = PdfReader(path)
+        return "".join(page.extract_text() or '' for page in reader.pages)
+    elif path.endswith('.txt'):
+        with open(path, 'r') as file:
+            return file.read()
+    return ""
+
+
+def save_file_record(filename, path, user_id, prompt_id):
+    file_record = UploadedFiles(FileName=filename, FilePath=path, UserID=user_id, PromptID=prompt_id,
+                                UploadDate=datetime.utcnow())
+    db.session.add(file_record)
+    db.session.commit()
+
+
+def save_prompt_message(text, response, prompt_id):
+    db.session.add(PromptMessages(PromptID=prompt_id, MessageText=text, IsResponse=False))
+    db.session.add(PromptMessages(PromptID=prompt_id, MessageText=response, IsResponse=True))
+    db.session.commit()
+
+
 @prompts_bp.route('/start-new-prompt')
 def start_new_prompt():
     session.pop('prompt_id', None)
