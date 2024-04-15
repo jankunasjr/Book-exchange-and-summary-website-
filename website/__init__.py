@@ -1,7 +1,7 @@
 from flask import Flask
 from website.extensions import db  # Import db from your extensions module
 from config import SQLALCHEMY_DATABASE_URI, \
-    SQLALCHEMY_TRACK_MODIFICATIONS  # Assuming these are defined in your config.py
+    SQLALCHEMY_TRACK_MODIFICATIONS, ollama_llm# Assuming these are defined in your config.py
 from flask_login import LoginManager
 
 def create_app():
@@ -10,7 +10,7 @@ def create_app():
     # Load the SQLAlchemy configuration from config.py
     app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
-    app.config['OLLAMA_LLM'] = "/Users/paulius/.ollama/models/blobs/sha256-8934d96d3f08982e95922b2b7a2c626a1fe873d7c3b06e8e56d7bc0a1fef9246"
+    app.config['OLLAMA_LLM'] = ollama_llm
 
     db.init_app(app)  # Initialize db with the app
 
