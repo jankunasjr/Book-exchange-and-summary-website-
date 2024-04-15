@@ -10,6 +10,8 @@ def create_app():
     # Load the SQLAlchemy configuration from config.py
     app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
+    app.config['OPEN_API_KEY'] = open_api_key
+    app.config['OLLAMA_LLM'] = ollama_llm
 
     db.init_app(app)  # Initialize db with the app
 
@@ -22,11 +24,13 @@ def create_app():
     from .models import Users
     from .inventory import inventory
     from .trades import trades
+    from .prompts import prompts_bp
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(inventory, url_prefix='/')
     app.register_blueprint(trades, url_prefix='/')
+    app.register_blueprint(prompts_bp, url_prefix='/prompts')
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
