@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Trade Screen{% endblock %}
+
+{% block content %}
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .title {
+            font-size: 2.5em;
+            color: #333;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .description {
+            font-size: 1.2em;
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .book-list {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .book-item {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+            flex-basis: calc(50% - 10px);
+        }
+
+        .book-item a {
+            display: block;
+            height: 100%;
+            width: 100%;
+            text-decoration: none;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+        .book-item a:hover {
+            color: #000;
+        }
+
+        .book-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #000;
+        }
+    </style>
+
+    <div class="container">
+        <h1 class="title">Trade Screen</h1>
+        <p class="description">Here you can trade with other players.</p>
+        <ul class="book-list">
+            {% for book, user in books %}
+                <li class="book-item"
+                    onclick="window.location.href='{{ url_for('trades.trade_request', book_id=book.BookID) }}'">
+                    <a href="{{ url_for('trades.trade_request', book_id=book.BookID) }}">
+                        {{ book.Title }} by {{ user.Username }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
