@@ -51,7 +51,7 @@ def chat():
 
     messages = PromptMessages.query.filter_by(PromptID=prompt_id).order_by(
         PromptMessages.Timestamp).all() if prompt_id else []
-    return render_template('prompts.html', messages=messages,
+    return render_template('prompt.html', messages=messages,
                            prompts_with_names=Prompts.query.filter_by(UserID=user_id).all())
 
 
