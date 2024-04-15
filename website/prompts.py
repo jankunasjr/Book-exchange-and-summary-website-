@@ -19,29 +19,41 @@ llm = LlamaCpp(model_path=ollama_llm, n_gpu_layers=60, n_batch=652, verbose=Fals
 prompt_template = PromptTemplate(template="Question: {question}\nAnswer:", input_variables=["question"])
 llm_chain = LLMChain(prompt=prompt_template, llm=llm)
 
+
 @prompts_bp.route('/chat', methods=['GET', 'POST'])
 def chat():
+    user_id = 1  # Replace this with actual user logic
+    prompt_id = session.get('prompt_id')
+
     if request.method == 'POST':
-        prompt_text = request.form.get('promptText')
-        # Here, add logic to interact with an AI model or OpenAI API when you're ready
-        # For demonstration purposes, we'll just echo the prompt back as the "response"
-        response_text = "Echo: " + prompt_text  # Placeholder for AI response
+        text_input = request.form.get('promptText', '').strip()
+        file = request.files.get('fileInput')
+        content_to_process = text_input  # Start with text input as the base content
 
-        # Assuming you've modified the Prompts model to include a response field
-        new_prompt = Prompts(UserID=1,  # Placeholder for actual user identification logic
-                             PromptText=prompt_text,
-                             ResponseText=response_text,  # Save the AI's response here
-                             SubmissionDate=datetime.utcnow())
-        db.session.add(new_prompt)
-        db.session.commit()
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(UPLOAD_FOLDER, filename)
+            file.save(filepath)
+            file_content = read_file(filepath)
+            if file_content:
+                content_to_process += "\n\n" + file_content  # Append file content to the prompt text
 
-        flash('Prompt submitted successfully!')
+        if content_to_process:  # Check if there is any content to process
+            if not prompt_id:
+                new_prompt = Prompts(UserID=user_id, Name=f'File+{text_input}' if file else text_input)
+                db.session.add(new_prompt)
+                db.session.commit()
+                prompt_id = new_prompt.PromptID
+                session['prompt_id'] = prompt_id
 
-    # Fetch all prompts and responses to display as chat history
-    chat_history = Prompts.query.order_by(Prompts.SubmissionDate.desc()).all()
+            response = llm_chain.run(question=content_to_process)
+            save_prompt_message(content_to_process, response, prompt_id)
 
-    # Use 'prompts.html' as per your note
-    return render_template('prompts.html', conversation_history=chat_history)
+    messages = PromptMessages.query.filter_by(PromptID=prompt_id).order_by(
+        PromptMessages.Timestamp).all() if prompt_id else []
+    return render_template('prompts.html', messages=messages,
+                           prompts_with_names=Prompts.query.filter_by(UserID=user_id).all())
+
 
 def process_text_input(text, prompt_id):
     response = llm_chain.run(question=text)
