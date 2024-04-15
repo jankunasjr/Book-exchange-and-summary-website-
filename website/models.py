@@ -78,10 +78,10 @@ class ChatMessages(db.Model):
 class Transactions(db.Model):
     __tablename__ = 'transactions'
     TransactionID = db.Column(db.Integer, primary_key=True)
-    SenderBookID = db.Column(db.Integer, db.ForeignKey('inventory.BookID'))
     ReceiverBookID = db.Column(db.Integer, db.ForeignKey('inventory.BookID'))
-    SenderID = db.Column(db.Integer, db.ForeignKey('users.UserID'))
+    SenderBookID = db.Column(db.Integer, db.ForeignKey('inventory.BookID'))
     ReceiverID = db.Column(db.Integer, db.ForeignKey('users.UserID'))
+    SenderID = db.Column(db.Integer, db.ForeignKey('users.UserID'))
     TransactionDate = db.Column(db.DateTime)
     Status = db.Column(db.String)
 
