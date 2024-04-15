@@ -35,7 +35,7 @@ class Inventory(db.Model):
     Title = db.Column(db.String)
     Author = db.Column(db.String)
     Genre = db.Column(db.String)
-    Status = db.Column(db.String)
+    Status = db.Column(db.Boolean, default=False)
     DeletedAt = db.Column(db.DateTime)
     CreatedAt = db.Column(db.DateTime)
 
