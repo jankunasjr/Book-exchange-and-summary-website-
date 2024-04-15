@@ -41,7 +41,7 @@
         <div class="navbar-nav">
             <a class="nav-item nav-link" id="home" href="/">Home</a>
             <a class="nav-item nav-link" id="your-books" href="/show-inventory">Your Books</a>
-            <a class="nav-item nav-link" id="summary-generator" href="/summary-generator">Summary Generator</a>
+            <a class="nav-item nav-link" id="summary-generator" href="{{ url_for('prompts.chat') }}">Summary Generator</a>
             <a class="nav-item nav-link" id="book-trading" href="/show-trades">Book Trading</a>
         </div>
     </div>

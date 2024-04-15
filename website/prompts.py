@@ -19,6 +19,29 @@ llm = LlamaCpp(model_path=ollama_llm, n_gpu_layers=60, n_batch=652, verbose=Fals
 prompt_template = PromptTemplate(template="Question: {question}\nAnswer:", input_variables=["question"])
 llm_chain = LLMChain(prompt=prompt_template, llm=llm)
 
+@prompts_bp.route('/chat', methods=['GET', 'POST'])
+def chat():
+    if request.method == 'POST':
+        prompt_text = request.form.get('promptText')
+        # Here, add logic to interact with an AI model or OpenAI API when you're ready
+        # For demonstration purposes, we'll just echo the prompt back as the "response"
+        response_text = "Echo: " + prompt_text  # Placeholder for AI response
+
+        # Assuming you've modified the Prompts model to include a response field
+        new_prompt = Prompts(UserID=1,  # Placeholder for actual user identification logic
+                             PromptText=prompt_text,
+                             ResponseText=response_text,  # Save the AI's response here
+                             SubmissionDate=datetime.utcnow())
+        db.session.add(new_prompt)
+        db.session.commit()
+
+        flash('Prompt submitted successfully!')
+
+    # Fetch all prompts and responses to display as chat history
+    chat_history = Prompts.query.order_by(Prompts.SubmissionDate.desc()).all()
+
+    # Use 'prompts.html' as per your note
+    return render_template('prompts.html', conversation_history=chat_history)
 
 def process_text_input(text, prompt_id):
     response = llm_chain.run(question=text)
