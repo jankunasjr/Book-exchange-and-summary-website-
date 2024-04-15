@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Prompt Generator{% endblock %}
+
+{% block content %}
+<h2>Prompt Generator</h2>
+
+<!-- Form for adding a new prompt -->
+<form action="/submit-prompt" method="post">
+    <div class="form-group">
+        <label for="promptText">Prompt:</label>
+        <input type="text" class="form-control" id="promptText" name="promptText" placeholder="Enter your prompt" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Prompt</button>
+</form>
+
+<!-- List existing prompts -->
+<h3>Existing Prompts</h3>
+<ul class="list-group">
+    {% for prompt in prompts %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ prompt.text }}
+        <button class="btn btn-danger btn-sm" onclick="location.href='/delete-prompt/{{ prompt.id }}'">Delete</button>
+    </li>
+    {% endfor %}
+</ul>
+
+<!-- Form for uploading a file -->
+<h3>Upload File for Prompt</h3>
+<form action="/upload-file" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="fileInput">Select file:</label>
+        <input type="file" class="form-control-file" id="fileInput" name="fileInput" required>
+    </div>
+    <button type="submit" class="btn btn-secondary">Upload File</button>
+</form>
+
+{% endblock %}
