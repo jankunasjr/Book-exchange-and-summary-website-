@@ -20,9 +20,13 @@ def create_app():
     from .views import views
     from .auth import auth
     from .models import Users
+    from .inventory import inventory
+    from .trades import trades
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(inventory, url_prefix='/')
+    app.register_blueprint(trades, url_prefix='/')
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
