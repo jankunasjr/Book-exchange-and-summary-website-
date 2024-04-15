@@ -1,5 +1,3 @@
-#######5 ollama funkcionalumas
-
 from flask import Blueprint, request, render_template, flash, session, redirect, url_for, current_app
 from werkzeug.utils import secure_filename
 import os
