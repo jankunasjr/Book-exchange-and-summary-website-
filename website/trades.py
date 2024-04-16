@@ -11,7 +11,7 @@ def show_trades():
     current_user_id = 0 # Get the user ID from the session
     books = db.session.query(Inventory, Users).join(Users, Inventory.OwnerID == Users.UserID).filter(
         Inventory.Status == True, Inventory.OwnerID != current_user_id).all()
-    return render_template("trades.html")
+    return render_template("trades.html", books = books)
 
 @trades.route('/submit-trade', methods=['POST'])
 def submit_trade():
