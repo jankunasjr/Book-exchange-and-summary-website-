@@ -8,7 +8,7 @@ from langchain_community.llms import LlamaCpp
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from config import ollama_llm
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 
 prompts_bp = Blueprint('prompts', __name__, template_folder='templates')
 ALLOWED_EXTENSIONS = {'txt', 'pdf'}
