@@ -30,6 +30,14 @@ def chat():
         file = request.files.get('fileInput')
         content_to_process = text_input  # Start with text input as the base content
 
+        if not text_input:
+            flash('Input cannot be empty', 'error')
+            return redirect(url_for('prompts.chat'))
+
+        if len(text_input) > 200:
+            flash('Input exceeds maximum length of 200 characters', 'error')
+            return redirect(url_for('prompts.chat'))  # Ensure this redirect is happening
+
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             filepath = os.path.join(UPLOAD_FOLDER, filename)
