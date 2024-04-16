@@ -165,6 +165,9 @@
                 var author = $(this).find('td:nth-child(2)').text();
                 var genre = $(this).find('td:nth-child(3)').text();
 
+                // Set the bookTitle input field value
+                $('#bookTitleInput').val(title);
+
                 showBookDetails(title, author, genre);
             });
         });
