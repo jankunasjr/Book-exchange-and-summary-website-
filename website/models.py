@@ -7,6 +7,7 @@ from .extensions import db
 from datetime import datetime
 from flask_login import UserMixin
 
+
 class UserRoleEnum(enum.Enum):
     Admin = "Admin"
     Premium = "Premium"
@@ -25,7 +26,6 @@ class Users(db.Model, UserMixin):
 
     def get_id(self):
         return str(self.UserID)
-
 
 
 class Inventory(db.Model):
@@ -104,4 +104,3 @@ class UploadedFiles(db.Model):
     FileName = db.Column(db.String(256), nullable=False)
     FilePath = db.Column(db.String(512), nullable=False)
     UploadDate = db.Column(db.DateTime, default=datetime.utcnow)
-
