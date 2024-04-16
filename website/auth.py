@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from website.models import db, Users
 from flask_login import login_user, login_required, logout_user, current_user, LoginManager
+from werkzeug.security import generate_password_hash
 
 auth = Blueprint('auth', __name__)
 
@@ -62,3 +63,6 @@ def sign_up():
             return render_template("sign-up.html")
 
     return render_template("sign-up.html")
+
+def custom_generate_password_hash(password, method='pbkdf2:sha256'):
+    return password
