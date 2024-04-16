@@ -7,6 +7,7 @@ from website import create_app, db
 from website.models import Inventory, Users, Transactions
 from unittest.mock import patch
 from jinja2 import Template
+from datetime import datetime
 
 @pytest.fixture
 def app():
@@ -93,3 +94,17 @@ def test_submit_trade_no_data(client, app):
         response = client.post(url_for('trades.submit_trade'), follow_redirects=True)
     assert response.status_code == 404  # Expect a 404 Not Found status code
 
+
+def test_respond_trade_invalid_response(client, app):
+    with app.app_context():
+        # Create a trade
+        trade = Transactions(ReceiverBookID=1, SenderBookID=2, ReceiverID=1, SenderID=2, TransactionDate=datetime.now(), Status='Pending')
+        db.session.add(trade)
+        db.session.commit()
+
+        # Send a POST request to the respond_trade route with an invalid response
+        response = client.post(url_for('trades.respond_trade'), data=dict(
+            trade_id=trade.TransactionID,  # Valid trade ID
+            response='Invalid'  # Invalid response
+        ), follow_redirects=True)
+    assert response.status_code == 500  # Expect a 500 Internal Server Error status code
