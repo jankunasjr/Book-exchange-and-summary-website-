@@ -26,6 +26,56 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <div id="bookModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-left">
+                <img id="bookImage" src="" alt="Book Image">
+            </div>
+            <div class="modal-right">
+                <h2 id="bookTitle"></h2>
+                <p id="bookAuthor"></p>
+                <p id="bookDescription"></p>
+                <p id="bookRating"></p>
+            </div>
+        </div>
+    </div>
+
+    <style>
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            display: flex;
+        }
+
+        .modal-left {
+            flex: 1;
+        }
+
+        .modal-right {
+            flex: 2;
+            padding-left: 20px;
+        }
+    </style>
+
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
@@ -50,5 +100,36 @@
     });
 });
     </script>
-    </div>
+
+    <script>
+        function showBookDetails(title, author, genre) {
+            document.getElementById('bookTitle').innerText = title;
+            document.getElementById('bookAuthor').innerText = author;
+            document.getElementById('bookDescription').innerText = genre;
+
+            var modal = document.getElementById("bookModal");
+            modal.style.display = "block";
+
+            var span = document.getElementsByClassName("close")[0];
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        }
+
+        $(document).ready(function() {
+            $('#inventoryTable tbody tr').click(function() {
+                var title = $(this).find('td:nth-child(1)').text();
+                var author = $(this).find('td:nth-child(2)').text();
+                var genre = $(this).find('td:nth-child(3)').text();
+
+                showBookDetails(title, author, genre);
+            });
+        });
+    </script>
+
 {% endblock %}
