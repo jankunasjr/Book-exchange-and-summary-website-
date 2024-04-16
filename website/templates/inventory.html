@@ -39,6 +39,17 @@
                 <p id="bookAuthor"></p>
                 <p id="bookDescription"></p>
                 <p id="bookRating"></p>
+                <form method="POST" action="/submit-review">
+                    <input type="hidden" id="bookTitleInput" name="bookTitle">
+                    <div class="rating">
+                        <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars">5 stars</label>
+                        <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars">4 stars</label>
+                        <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars">3 stars</label>
+                        <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars">2 stars</label>
+                        <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">1 star</label>
+                    </div>
+                    <button type="submit" class="submit-button">Submit Review</button>
+                </form>
             </div>
         </div>
     </div>
@@ -74,6 +85,33 @@
             flex: 2;
             padding-left: 20px;
         }
+
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+
+        .rating {
+            unicode-bidi: bidi-override;
+            direction: rtl;
+        }
+        .rating > label {
+            display: inline-block;
+            padding: 30px;
+            margin: 0;
+            position: relative;
+            width: 1em;
+            cursor: pointer;
+            color: #000;
+        }
+        .rating > input {
+            display: none;
+        }
+        .rating > label:hover,
+        .rating > label:hover ~ label,
+        .rating > input:checked ~ label {
+            color: #ffc700;
+        }
+
     </style>
 
     <!-- Include jQuery -->
