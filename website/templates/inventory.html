@@ -16,7 +16,7 @@
                 </thead>
                 <tbody>
                     {% for item in inventory %}
-                        <tr>
+                        <tr data-average-rating="{{ item.average_rating }}">
                             <td>{{ item.Title }}</td>
                             <td>{{ item.Author }}</td>
                             <td>{{ item.Genre }}</td>
@@ -141,10 +141,11 @@
     </script>
 
     <script>
-        function showBookDetails(title, author, genre) {
+        function showBookDetails(title, author, genre, averageRating) {
             document.getElementById('bookTitle').innerText = title;
             document.getElementById('bookAuthor').innerText = author;
             document.getElementById('bookDescription').innerText = genre;
+            document.getElementById('bookRating').innerText = averageRating ? `Average Rating: ${averageRating}` : 'No reviews yet';
 
             var modal = document.getElementById("bookModal");
             modal.style.display = "block";
@@ -165,11 +166,12 @@
                 var title = $(this).find('td:nth-child(1)').text();
                 var author = $(this).find('td:nth-child(2)').text();
                 var genre = $(this).find('td:nth-child(3)').text();
+                var averageRating = $(this).data('average-rating');
 
                 // Set the bookTitle input field value
                 $('#bookTitleInput').val(title);
 
-                showBookDetails(title, author, genre);
+                showBookDetails(title, author, genre, averageRating);
             });
         });
     </script>
