@@ -16,7 +16,7 @@ def login():
 
         user = Users.query.filter_by(Email=email).first()
         if user:
-            if user.PasswordHash == password:
+            if check_password_hash(user.PasswordHash, password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
@@ -54,7 +54,7 @@ def sign_up():
         elif len(password1) < 3:
             flash('Password must be at least 3 characters.', category='error')
         else:
-            new_user = Users(Email=email, Username=Username, PasswordHash=password1,  RegistrationDate=datetime.utcnow(), UserRole = "Regular")
+            new_user = Users(Email=email, Username=Username, PasswordHash=custom_generate_password_hash(password1, method='pbkdf2:sha256'),  RegistrationDate=datetime.utcnow(), UserRole = "Regular")
 
             db.session.add(new_user)
             db.session.commit()
@@ -65,4 +65,4 @@ def sign_up():
     return render_template("sign-up.html")
 
 def custom_generate_password_hash(password, method='pbkdf2:sha256'):
-    return password
+    return generate_password_hash(password, method=method)
