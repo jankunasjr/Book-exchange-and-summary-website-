@@ -36,3 +36,30 @@ def trade_request(book_id):
     book = Inventory.query.get(book_id)
     user_books = Inventory.query.filter_by(OwnerID=1).all()  # Fetch all books from the database owned by the user
     return render_template("trade_request.html", book=book, user_books=user_books)
+
+
+@trades.route('/respond-trade', methods=['POST'])
+def respond_trade():
+    trade_id = request.form.get('trade_id')
+    response = request.form.get('response')
+    trade = Transactions.query.get(trade_id)
+    if trade:
+        if response == 'Accepted':
+            # Get the books involved in the trade
+            sender_book = Inventory.query.get(trade.SenderBookID)
+            receiver_book = Inventory.query.get(trade.ReceiverBookID)
+
+            # Swap the owner IDs of the books
+            sender_book.OwnerID, receiver_book.OwnerID = receiver_book.OwnerID, sender_book.OwnerID
+
+            # Update the trade status
+            trade.Status = 'Accepted'
+
+            db.session.commit()
+        else:
+            trade.Status = 'Rejected'
+            db.session.commit()
+
+        return redirect(url_for('trades.show_trades'))
+    else:
+        return "Trade not found", 404
