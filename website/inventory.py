@@ -18,13 +18,12 @@ def submit_review():
     print("submit_review function called")
     rating = request.form.get('rating')
     book_title = request.form.get('bookTitle')
-    print(f"Book title: {book_title}")
+    review_text = request.form.get('reviewText')
 
-    book = Inventory.query.filter(Inventory.Title.ilike(book_title)).first()  # Use ilike for case-insensitive search
-    print(f"Book: {book}")
+    book = Inventory.query.filter(Inventory.Title.ilike(book_title)).first()
 
     if book:
-        review = Reviews(BookID=book.BookID, UserID=1, Rating=rating, ReviewDate=datetime.now())
+        review = Reviews(BookID=book.BookID, UserID=2, Rating=rating, ReviewText=review_text, ReviewDate=datetime.now())
         try:
             db.session.add(review)  # Add the new review to the session
             db.session.commit()  # Commit the changes
