@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Trade Request{% endblock %}
+
+{% block content %}
+    <h1>Trade Request</h1>
+    <p>You are requesting to trade for {{ book.Title }}.</p>
+    <form action="{{ url_for('trades.submit_trade') }}" method="post">
+        <label for="receiver_book_id">Choose a book from your inventory to trade:</label>
+        <select name="receiver_book_id" id="receiver_book_id">
+            {% for user_book in user_books %}
+                <option value="{{ user_book.BookID }}">{{ user_book.Title }}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="sender_book_id" value="{{ book.BookID }}">
+        <input type="submit" value="Submit Trade Request">
+    </form>
+{% endblock %}
