@@ -25,17 +25,24 @@ def submit_review():
     rating = request.form.get('rating')
     book_title = request.form.get('bookTitle')
     review_text = request.form.get('reviewText')
+    user_id = request.form.get('userID')  # Get the user ID from the form data
+
+    # Validate the rating
+    if not 1 <= int(rating) <= 5:
+        return "Invalid rating. Rating should be between 1 and 5.", 400
 
     book = Inventory.query.filter(Inventory.Title.ilike(book_title)).first()
 
     if book:
-        review = Reviews(BookID=book.BookID, UserID=2, Rating=rating, ReviewText=review_text, ReviewDate=datetime.now())
+        review = Reviews(BookID=book.BookID, UserID=user_id, Rating=rating, ReviewText=review_text, ReviewDate=datetime.now())
         try:
             db.session.add(review)  # Add the new review to the session
             db.session.commit()  # Commit the changes
             print(f"Review for {book_title} added with rating {rating}")
+            return redirect(url_for('inventory.show_inventory')), 200  # Return a success status code
         except Exception as e:
             print(f"Error occurred: {e}")
             db.session.rollback()  # Rollback the changes in case of error
+            return redirect(url_for('inventory.show_inventory')), 500  # Return a server error status code
 
-    return redirect(url_for('inventory.show_inventory'))
+    return redirect(url_for('inventory.show_inventory')), 404  # Return a not found status code if the book does not exist
