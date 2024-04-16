@@ -3,9 +3,10 @@ import unittest
 from website.models import Prompts, UploadedFiles, PromptMessages
 from flask import Flask, session, url_for
 from config import SQLALCHEMY_DATABASE_URI
-from website.prompts import save_file_record, save_prompt_message, read_file
+from website.prompts import save_file_record, save_prompt_message, read_file, chat
 from reportlab.lib.pagesizes import LETTER
 from reportlab.pdfgen import canvas
+import time
 
 
 class FlaskTestCase(unittest.TestCase):
@@ -130,6 +131,14 @@ class FlaskTestCase(unittest.TestCase):
 
         # Test reading the PDF file
         self.assertEqual(read_file("test.pdf"), "Test PDF content\n")
+
+    def test_excessively_long_input_rejected(self):
+        """Test that input exceeding 200 characters is rejected."""
+        long_input = 'a' * 201  # Generates a string with 201 characters
+        response = self.client.post('/prompt/chat', data={'promptText': long_input}, follow_redirects=True)
+        self.assertNotEqual(response.status_code, 302, "The input should not be processed.")
+        self.assertIn('Input exceeds maximum length of 200 characters', response.data.decode(),
+                      "Error message not found.")
 
 
 def create_pdf(file_path):
