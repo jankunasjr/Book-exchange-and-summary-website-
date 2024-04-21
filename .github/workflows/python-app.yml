@@ -13,8 +13,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    env:
-      PYTHONPATH: ${{ github.workspace }}/website  # Ensures the website package can be discovered
 
     services:
       postgres:
@@ -56,8 +54,20 @@ jobs:
       run: |
         psql -h localhost -U postgres -d testdb -a -f populate_db.sql
 
+    - name: Prepare for testing
+      run: |
+        pwd
+        ls -la
+        echo "PYTHONPATH: ${PYTHONPATH}"
+        echo "Current directory: $(pwd)"
+        ls -la website/
+
     - name: Test with pytest
-      run: pytest website/tests --import-mode=append
+      env:
+        PYTHONPATH: ${{ github.workspace }}/website
+      run: |
+        cd website
+        pytest tests --import-mode=append
 
     - name: Test with unittest
       run: |
