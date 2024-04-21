@@ -15,9 +15,14 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf'}
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-llm = LlamaCpp(model_path=ollama_llm, n_gpu_layers=60, n_batch=652, verbose=False)
-prompt_template = PromptTemplate(template="Question: {question}\nAnswer:", input_variables=["question"])
-llm_chain = LLMChain(prompt=prompt_template, llm=llm)
+# Check environment variable to enable LLM
+if os.getenv("ENABLE_LLM", "False") == "True":
+    llm = LlamaCpp(model_path=ollama_llm, n_gpu_layers=60, n_batch=652, verbose=False)
+    prompt_template = PromptTemplate(template="Question: {question}\nAnswer:", input_variables=["question"])
+    llm_chain = LLMChain(prompt=prompt_template, llm=llm)
+else:
+    llm = None
+    llm_chain = None
 
 
 @prompts_bp.route('/chat', methods=['GET', 'POST'])
@@ -64,15 +69,17 @@ def chat():
 
 
 def process_text_input(text, prompt_id):
-    response = llm_chain.run(question=text)
-    save_prompt_message(text, response, prompt_id)
+    if llm_chain:
+        response = llm_chain.run(question=text)
+        save_prompt_message(text, response, prompt_id)
 
 
 def process_file(path, filename, user_id, prompt_id):
-    content = read_file(path)
-    response = llm_chain.run(question=content)
-    save_file_record(filename, path, user_id, prompt_id)
-    save_prompt_message(content, response, prompt_id)
+    if llm_chain:
+        content = read_file(path)
+        response = llm_chain.run(question=content)
+        save_file_record(filename, path, user_id, prompt_id)
+        save_prompt_message(content, response, prompt_id)
 
 
 def read_file(path):
