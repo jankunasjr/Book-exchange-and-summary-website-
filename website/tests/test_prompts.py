@@ -43,7 +43,7 @@ class FlaskTestCase(unittest.TestCase):
         #self.assertEqual(response.status_code, 200)
 
         # Get the ID of the newly created prompt
-        new_prompt = Prompts.query.filter_by(Name='How can I improve my writing?').first()
+        new_prompt = Prompts.query.filter_by(Name='Writing Tips').first()
         self.assertIsNotNone(new_prompt)
         prompt_id = new_prompt.PromptID
 
