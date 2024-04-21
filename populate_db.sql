@@ -1,6 +1,3 @@
--- Enable extensions for UUID if needed
--- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TYPE UserRoleEnum AS ENUM ('Admin', 'Premium', 'Regular');
 
 -- Users Table
