@@ -62,13 +62,6 @@ jobs:
         echo "Current directory: $(pwd)"
         ls -la website/
 
-    - name: Test with pytest
-      env:
-        PYTHONPATH: ${{ github.workspace }}/website
-      run: |
-        cd website
-        pytest tests --import-mode=append
-
     - name: Test with unittest
       run: |
-        python -m unittest discover -s website/tests
+        coverage run -m unittest discover -s website/tests
