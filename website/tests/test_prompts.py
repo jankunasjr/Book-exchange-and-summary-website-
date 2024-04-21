@@ -34,17 +34,6 @@ class FlaskTestCase(unittest.TestCase):
         with self.client as client:
             response = client.get('/prompt/start-new-prompt')
             self.assertEqual(response.status_code, 302)
-            
-""" doesnt work with pipeline
-    def test_new_prompt_creation(self):
-        #Test creating a new prompt via POST request to the /chat endpoint.
-        initial_prompt_count = Prompts.query.count()
-        response = self.client.post('/prompt/chat', data={'promptText': 'Test new prompt'}, follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(Prompts.query.count(), initial_prompt_count + 1)
-        new_prompt = Prompts.query.order_by(Prompts.PromptID.desc()).first()
-        self.assertIsNotNone(new_prompt)
-        self.assertEqual(new_prompt.Name, 'Test new prompt')"""
 
 
     def test_delete_prompt(self):
@@ -154,3 +143,15 @@ def create_pdf(file_path):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+""" doesnt work with pipeline
+    def test_new_prompt_creation(self):
+        #Test creating a new prompt via POST request to the /chat endpoint.
+        initial_prompt_count = Prompts.query.count()
+        response = self.client.post('/prompt/chat', data={'promptText': 'Test new prompt'}, follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Prompts.query.count(), initial_prompt_count + 1)
+        new_prompt = Prompts.query.order_by(Prompts.PromptID.desc()).first()
+        self.assertIsNotNone(new_prompt)
+        self.assertEqual(new_prompt.Name, 'Test new prompt')"""
