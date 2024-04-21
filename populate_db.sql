@@ -1,3 +1,93 @@
+-- Enable extensions for UUID if needed
+-- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Users Table
+CREATE TABLE users (
+    UserID SERIAL PRIMARY KEY,
+    Username VARCHAR,
+    Email VARCHAR,
+    PasswordHash VARCHAR,
+    UserRole UserRoleEnum,
+    RegistrationDate TIMESTAMP,
+    DeletedAt TIMESTAMP
+);
+
+-- Inventory Table
+CREATE TABLE inventory (
+    BookID SERIAL PRIMARY KEY,
+    OwnerID INTEGER REFERENCES users(UserID),
+    Title VARCHAR,
+    Author VARCHAR,
+    Genre VARCHAR,
+    Status BOOLEAN DEFAULT false,
+    DeletedAt TIMESTAMP,
+    CreatedAt TIMESTAMP
+);
+
+-- Prompts Table
+CREATE TABLE prompts (
+    PromptID SERIAL PRIMARY KEY,
+    UserID INTEGER REFERENCES users(UserID),
+    SubmissionDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Name TEXT
+);
+
+-- Prompt Messages Table
+CREATE TABLE prompt_messages (
+    MessageID SERIAL PRIMARY KEY,
+    PromptID INTEGER REFERENCES prompts(PromptID),
+    MessageText TEXT NOT NULL,
+    IsResponse BOOLEAN DEFAULT false,
+    Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Chats Table
+CREATE TABLE chats (
+    ChatID SERIAL PRIMARY KEY,
+    UserID INTEGER REFERENCES users(UserID),
+    StartDate TIMESTAMP,
+    EndDate TIMESTAMP
+);
+
+-- Chat Messages Table
+CREATE TABLE chat_messages (
+    MessageID SERIAL PRIMARY KEY,
+    ChatID INTEGER REFERENCES chats(ChatID),
+    UserID INTEGER REFERENCES users(UserID),
+    MessageText TEXT,
+    Timestamp TIMESTAMP
+);
+
+-- Transactions Table
+CREATE TABLE transactions (
+    TransactionID SERIAL PRIMARY KEY,
+    ReceiverBookID INTEGER REFERENCES inventory(BookID),
+    SenderBookID INTEGER REFERENCES inventory(BookID),
+    ReceiverID INTEGER REFERENCES users(UserID),
+    SenderID INTEGER REFERENCES users(UserID),
+    TransactionDate TIMESTAMP,
+    Status VARCHAR
+);
+
+-- Reviews Table
+CREATE TABLE reviews (
+    ReviewID SERIAL PRIMARY KEY,
+    BookID INTEGER REFERENCES inventory(BookID),
+    UserID INTEGER REFERENCES users(UserID),
+    Rating INTEGER,
+    ReviewText TEXT,
+    ReviewDate TIMESTAMP
+);
+
+-- Uploaded Files Table
+CREATE TABLE uploaded_files (
+    FileID SERIAL PRIMARY KEY,
+    PromptID INTEGER REFERENCES prompts(PromptID) NOT NULL,
+    UserID INTEGER REFERENCES users(UserID) NOT NULL,
+    FileName VARCHAR(256) NOT NULL,
+    FilePath VARCHAR(512) NOT NULL,
+    UploadDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 -- Insert users
 INSERT INTO users ("Username", "Email", "PasswordHash", "UserRole", "RegistrationDate") VALUES
