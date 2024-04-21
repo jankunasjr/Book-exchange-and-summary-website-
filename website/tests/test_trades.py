@@ -55,7 +55,7 @@ def test_submit_trade(client, app):
         ), follow_redirects=True)
     assert response.status_code == 200
 
-"""def test_submit_trade_valid_data(client, app):
+def test_submit_trade_valid_data(client, app):
     with app.app_context():
         # Fetch the users
         user1 = Users.query.get(1)
@@ -87,7 +87,7 @@ def test_submit_trade(client, app):
         assert response.status_code == 200
 
         # Check the content of the response
-        assert 'Trade submitted successfully' in response.data.decode()"""
+        assert 'Trade submitted successfully' in response.data.decode()
 
 def test_submit_trade_invalid_book_id(client, app):
     with app.app_context():
@@ -145,4 +145,4 @@ def test_respond_trade_invalid_response(client, app):
             trade_id=new_transaction.TransactionID,  # Valid trade ID
             response='Invalid'  # Invalid response
         ), follow_redirects=True)
-    assert response.status_code == 400  # Expect a 400 Bad Request status code
+    assert response.status_code == 400
