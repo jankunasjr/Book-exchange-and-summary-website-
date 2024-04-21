@@ -64,6 +64,16 @@ jobs:
       run: |
         export PGPASSWORD=postgres
         psql -h localhost -U postgres -d testdb -a -f populate_db.sql
+        
+    - name: Check Database Schema
+      env:
+        PGPASSWORD: postgres
+      run: |
+        psql -h localhost -U postgres -d testdb -c "
+          SELECT column_name, data_type 
+          FROM information_schema.columns 
+          WHERE table_name = 'users';
+        "
 
     - name: Test with unittest
       env:
