@@ -1,6 +1,8 @@
 -- Enable extensions for UUID if needed
 -- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TYPE UserRoleEnum AS ENUM ('Admin', 'Premium', 'Regular');
+
 -- Users Table
 CREATE TABLE users (
     UserID SERIAL PRIMARY KEY,
@@ -90,45 +92,45 @@ CREATE TABLE uploaded_files (
 );
 
 -- Insert users
-INSERT INTO users ("Username", "Email", "PasswordHash", "UserRole", "RegistrationDate") VALUES
+INSERT INTO users (username, email, passwordhash, userrole, registrationdate) VALUES
 ('JohnDoe', 'admin@admin.com', 'admin', 'Admin', '2023-04-15'),
 ('JaneSmith', 'jane@example.com', 'hashed_password', 'Premium', '2023-04-15'),
 ('AliceJohnson', 'alice@example.com', 'hashed_password', 'Regular', '2023-04-15');
 
 -- Insert inventory items
-INSERT INTO inventory ("OwnerID", "Title", "Author", "Genre", "Status", "CreatedAt") VALUES
+INSERT INTO inventory (ownerid, title, author, genre, status, createdat) VALUES
 (1, 'The Great Gatsby', 'F. Scott Fitzgerald', 'Fiction', FALSE, '2023-04-15'),
 (2, '1984', 'George Orwell', 'Dystopian', TRUE, '2023-04-15'),
 (1, 'To Kill a Mockingbird', 'Harper Lee', 'Fiction', FALSE, '2023-04-15');
 
 -- Insert prompts
-INSERT INTO prompts ("UserID", "SubmissionDate", "Name") VALUES
+INSERT INTO prompts (userid, submissiondate, name) VALUES
 (2, '2023-04-15', 'Writing Tips'),
 (3, '2023-04-15', 'Book Review Guidelines');
 
 -- Insert prompt messages
-INSERT INTO prompt_messages ("PromptID", "MessageText", "IsResponse", "Timestamp") VALUES
+INSERT INTO prompt_messages (promptid, messagetext, isresponse, timestamp) VALUES
 (1, 'How can I improve my writing?', FALSE, '2023-04-15'),
 (1, 'Try focusing on your narrative structure.', TRUE, '2023-04-15');
 
 -- Insert chats
-INSERT INTO chats ("UserID", "StartDate", "EndDate") VALUES
+INSERT INTO chats (userid, startdate, enddate) VALUES
 (1, '2023-04-15', '2023-04-15'),
 (2, '2023-04-15', '2023-04-15');
 
 -- Insert chat messages
-INSERT INTO chat_messages ("ChatID", "UserID", "MessageText", "Timestamp") VALUES
+INSERT INTO chat_messages (chatid, userid, messagetext, timestamp) VALUES
 (1, 1, 'Hello, how can I help you today?', '2023-04-15'),
 (1, 2, 'I need help with my account.', '2023-04-15');
 
 -- Insert transactions
-INSERT INTO transactions ("ReceiverBookID", "SenderBookID", "ReceiverID", "SenderID", "TransactionDate", "Status") VALUES
+INSERT INTO transactions (receiverbookid, senderbookid, receiverid, senderid, transactiondate, status) VALUES
 (2, 3, 2, 1, '2023-04-15', 'Completed');
 
 -- Insert reviews
-INSERT INTO reviews ("BookID", "UserID", "Rating", "ReviewText", "ReviewDate") VALUES
+INSERT INTO reviews (bookid, userid, rating, reviewtext, reviewdate) VALUES
 (3, 2, 5, 'An excellent read with profound characters.', '2023-04-15');
 
 -- Insert uploaded files
-INSERT INTO uploaded_files ("PromptID", "UserID", "FileName", "FilePath", "UploadDate") VALUES
+INSERT INTO uploaded_files (promptid, userid, filename, filepath, uploaddate) VALUES
 (1, 2, 'writing_tips.pdf', '/files/writing_tips.pdf', '2023-04-15');
