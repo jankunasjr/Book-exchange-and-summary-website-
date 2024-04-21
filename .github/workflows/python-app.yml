@@ -16,7 +16,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:12
+        image: postgres:15.6
         env:
           POSTGRES_DB: testdb
           POSTGRES_USER: postgres
