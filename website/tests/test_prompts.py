@@ -44,14 +44,14 @@ class FlaskTestCase(unittest.TestCase):
         self.assertEqual(Prompts.query.count(), initial_prompt_count + 1)
         new_prompt = Prompts.query.order_by(Prompts.PromptID.desc()).first()
         self.assertIsNotNone(new_prompt)
-        self.assertEqual(new_prompt.Name, 'Test new prompt')
-"""
+        self.assertEqual(new_prompt.Name, 'Test new prompt')"""
+
 
     def test_delete_prompt(self):
-        """Test deleting a prompt via POST request to the /delete-prompt endpoint.
+        """Test deleting a prompt via POST request to the /delete-prompt endpoint."""
         # Create a new prompt to delete
-        response = self.client.post('/prompt/chat', data={'promptText': 'Test prompt to delete'}, follow_redirects=True)
-        self.assertEqual(response.status_code, 200)"""
+        #response = self.client.post('/prompt/chat', data={'promptText': 'Test prompt to delete'}, follow_redirects=True)
+        #self.assertEqual(response.status_code, 200)
 
         # Get the ID of the newly created prompt
         new_prompt = Prompts.query.filter_by(Name='How can I improve my writing?').first()
