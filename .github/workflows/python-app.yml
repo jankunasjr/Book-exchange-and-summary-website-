@@ -61,10 +61,9 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Create and populate the database
-      env:
-        PGPASSWORD: postgres
       run: |
-        psql -h localhost -U postgres -W postgres -d testdb -a -f populate_db.sql
+        export PGPASSWORD=postgres
+        psql -h localhost -U postgres -d testdb -a -f populate_db.sql
 
     - name: Test with unittest
       env:
