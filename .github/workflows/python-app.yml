@@ -45,15 +45,15 @@ jobs:
 
     - name: Create config.py
       run: |
-        echo "username = 'postgres'" > website/config.py
-        echo "password = 'postgres'" >> website/config.py
-        echo "database = 'testdb'" >> website/config.py
-        echo "test_database = 'kesas_test'" >> website/config.py
-        echo "SQLALCHEMY_DATABASE_URI = 'postgresql://${username}:${password}@localhost/${database}'" >> website/config.py
-        echo "SQLALCHEMY_TEST_DATABASE_URI = 'postgresql://${username}:${password}@localhost/${test_database}'" >> website/config.py
-        echo "SQLALCHEMY_TRACK_MODIFICATIONS = False" >> website/config.py
-        echo "SECRET_KEY = '14141'" >> website/config.py
-        echo "ollama_llm = '/.ollama/models/blobs/sha256-8934d96d3f08982e95922b2b7a2c626a1fe873d7c3b06e8e56d7bc0a1fef9246'" >> website/config.py
+        echo "username = 'postgres'" > config.py
+        echo "password = 'postgres'" >> config.py
+        echo "database = 'testdb'" >> config.py
+        echo "test_database = 'kesas_test'" >> config.py
+        echo "SQLALCHEMY_DATABASE_URI = 'postgresql://${username}:${password}@localhost/${database}'" >> config.py
+        echo "SQLALCHEMY_TEST_DATABASE_URI = 'postgresql://${username}:${password}@localhost/${test_database}'" >> config.py
+        echo "SQLALCHEMY_TRACK_MODIFICATIONS = False" >> config.py
+        echo "SECRET_KEY = '14141'" >> config.py
+        echo "ollama_llm = '/.ollama/models/blobs/sha256-8934d96d3f08982e95922b2b7a2c626a1fe873d7c3b06e8e56d7bc0a1fef9246'" >> config.py
 
     - name: Lint with flake8
       run: |
