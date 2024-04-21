@@ -103,6 +103,7 @@ INSERT INTO inventory ("OwnerID", "Title", "Author", "Genre", "Status", "Created
 
 -- Insert prompts
 INSERT INTO prompts ("UserID", "SubmissionDate", "Name") VALUES
+(1, '2023-04-15', 'Test prompt'),
 (2, '2023-04-15', 'Writing Tips'),
 (3, '2023-04-15', 'Book Review Guidelines');
 
