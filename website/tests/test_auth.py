@@ -43,7 +43,7 @@ class FlaskLoginTestCase(unittest.TestCase):
 
     def test_signup_email_already_exists(self):
         response = self.client.post('/sign-up', data={
-            'email': 'existing@example.com',
+            'email': 'alice@example.com',
             'username': 'TestUser2',
             'password1': 'password123',
             'password2': 'password123'
