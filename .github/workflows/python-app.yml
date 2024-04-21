@@ -80,4 +80,5 @@ jobs:
         PYTHONPATH: ${{ github.workspace }}
         ENABLE_LLM: False  # Disable LLM usage in GitHub Actions
       run: |
-        python -m unittest discover -s website/tests
+        coverage run -m unittest discover -s website/tests
+
