@@ -43,6 +43,18 @@ jobs:
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+    - name: Create config.py
+      run: |
+        echo "username = 'postgres'" > website/config.py
+        echo "password = 'postgres'" >> website/config.py
+        echo "database = 'testdb'" >> website/config.py
+        echo "test_database = 'kesas_test'" >> website/config.py
+        echo "SQLALCHEMY_DATABASE_URI = 'postgresql://${username}:${password}@localhost/${database}'" >> website/config.py
+        echo "SQLALCHEMY_TEST_DATABASE_URI = 'postgresql://${username}:${password}@localhost/${test_database}'" >> website/config.py
+        echo "SQLALCHEMY_TRACK_MODIFICATIONS = False" >> website/config.py
+        echo "SECRET_KEY = '14141'" >> website/config.py
+        echo "ollama_llm = '/.ollama/models/blobs/sha256-8934d96d3f08982e95922b2b7a2c626a1fe873d7c3b06e8e56d7bc0a1fef9246'" >> website/config.py
+
     - name: Lint with flake8
       run: |
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
@@ -54,14 +66,6 @@ jobs:
       run: |
         psql -h localhost -U postgres -d testdb -a -f populate_db.sql
 
-    - name: Prepare for testing
-      run: |
-        pwd
-        ls -la
-        echo "PYTHONPATH: ${PYTHONPATH}"
-        echo "Current directory: $(pwd)"
-        ls -la website/
-
     - name: Test with unittest
       run: |
-        coverage run -m unittest discover -s website/tests
+        python -m unittest discover -s website/tests
