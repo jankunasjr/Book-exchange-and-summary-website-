@@ -93,6 +93,7 @@ CREATE TABLE "uploaded_files" (
 INSERT INTO users ("Username", "Email", "PasswordHash", "UserRole", "RegistrationDate") VALUES
 ('JohnDoe', 'admin@admin.com', 'admin', 'Admin', '2023-04-15'),
 ('JaneSmith', 'jane@example.com', 'hashed_password', 'Premium', '2023-04-15'),
+('adminadmin@gmail.com','adminadmin@gmail.com','pbkdf2:sha256:600000$BjKGdUgEm2b0ZcZJ$9950e36b8850858319e380fd51be2233a4d9d1edd13fdc00ceaab21a77b8ea96','Regular','2024-04-22'),
 ('AliceJohnson', 'alice@example.com', 'hashed_password', 'Regular', '2023-04-15');
 
 -- Insert inventory items
