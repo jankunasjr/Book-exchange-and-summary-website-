@@ -88,5 +88,6 @@ jobs:
         PYTHONPATH: ${{ github.workspace }}
         ENABLE_LLM: False  # Disable LLM usage in GitHub Actions
       run: |
-        coverage run -m pytest discover -s website/tests -p test_trades.py
+        coverage run -m pytest website/tests/test_trades.py
+
 
