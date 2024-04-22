@@ -82,3 +82,11 @@ jobs:
       run: |
         coverage run -m unittest discover -s website/tests -p test_prompts.py
 
+
+    - name: Test with unittest trades
+      env:
+        PYTHONPATH: ${{ github.workspace }}
+        ENABLE_LLM: False  # Disable LLM usage in GitHub Actions
+      run: |
+        coverage run -m unittest discover -s website/tests -p test_trades.py
+
