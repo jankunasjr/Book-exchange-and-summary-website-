@@ -13,21 +13,16 @@ class TestInventory(unittest.TestCase):
         cls.app_context = cls.app.app_context()
         cls.app_context.push()
 
-    def tearDown(self):
-        db.session.remove()
-        db.drop_all()
-        self.app_context.pop()
-
     def test_show_inventory(self):
         response = self.client.get('/show-inventory')
         self.assertEqual(response.status_code, 200)
 
-    '''
+
     def test_submit_review(self):
         response = self.client.post('/submit-review',
                                     data={'rating': 5, 'bookTitle': 'The Great Gatsby', 'reviewText': 'Great book!', 'userID': 1})
         self.assertEqual(response.status_code, 200)
-    '''
+    
 
 if __name__ == '__main__':
     unittest.main()
