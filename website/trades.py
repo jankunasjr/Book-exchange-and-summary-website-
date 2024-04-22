@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .models import Inventory, Users, Transactions
 from sqlalchemy import join
 from . import db
@@ -57,6 +57,7 @@ def submit_trade():
         transaction = Transactions(ReceiverBookID=sender_book_id, SenderBookID=receiver_book_id, ReceiverID=receiver.OwnerID, SenderID=1, TransactionDate=datetime.now(), Status='Pending')
         db.session.add(transaction)
         db.session.commit()
+        flash('Trade request has been sent successfully!', 'success')
         return redirect(url_for('trades.show_trades'))
     else:
         return "Book not found", 404
@@ -74,7 +75,7 @@ def respond_trade():
     response = request.form.get('response')
     trade = Transactions.query.get(trade_id)
     if trade:
-        if response == 'Accepted'or response == 'Rejected':
+        if response == 'Accepted':
             # Get the books involved in the trade
             sender_book = Inventory.query.get(trade.SenderBookID)
             receiver_book = Inventory.query.get(trade.ReceiverBookID)
@@ -86,9 +87,12 @@ def respond_trade():
             trade.Status = 'Accepted'
 
             db.session.commit()
-        else:
+            flash('Trade request accepted!', 'success')
+        elif response == 'Rejected':
             trade.Status = 'Rejected'
             db.session.commit()
+            flash('Trade request rejected!', 'error')
+        else:
             return "Invalid response", 400
 
         return redirect(url_for('trades.show_trades'))
