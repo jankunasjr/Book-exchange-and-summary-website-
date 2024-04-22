@@ -90,4 +90,11 @@ jobs:
       run: |
         coverage run -m pytest website/tests/test_trades.py
 
+    - name: Test with unittest auth
+      env:
+        PYTHONPATH: ${{ github.workspace }}
+        ENABLE_LLM: False  # Disable LLM usage in GitHub Actions
+      run: |
+        coverage run -m pytest website/tests/test_auth.py
+
 
