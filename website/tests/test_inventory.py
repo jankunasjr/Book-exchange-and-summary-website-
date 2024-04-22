@@ -1,15 +1,15 @@
 import unittest
 from website import db, create_app
+from config import SQLALCHEMY_DATABASE_URI
 
 class TestInventory(unittest.TestCase):
-    def setUp(self):
-        self.app = create_app()
-        self.app.config['TESTING'] = True
-        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-        self.client = self.app.test_client()
-        self.app_context = self.app.app_context()
-        self.app_context.push()
-        db.create_all()
+    def setUpClass(cls):
+        cls.app = create_app()
+        cls.app.config['TESTING'] = True
+        cls.app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+        cls.client = cls.app.test_client()
+        cls.app_context = cls.app.app_context()
+        cls.app_context.push()
 
     def tearDown(self):
         db.session.remove()
@@ -22,8 +22,7 @@ class TestInventory(unittest.TestCase):
 
     def test_submit_review(self):
         response = self.client.post('/submit-review',
-                                    data={'rating': 5, 'bookTitle': 'Test Book', 'reviewText': 'Great book!',
-                                          'userID': 1})
+                                    data={'rating': 5, 'bookTitle': 'The Great Gatsby', 'reviewText': 'Great book!', 'userID': 1})
         self.assertEqual(response.status_code, 200)
 
 
