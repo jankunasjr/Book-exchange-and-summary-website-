@@ -20,8 +20,8 @@ class FlaskLoginTestCase(unittest.TestCase):
 
     def test_successful_login(self):
         response = self.client.post('/login', data={
-            'email': 'alice@example.com',
-            'password': 'hashed_password'
+            'email': 'adminadmin@gmail.com',
+            'password': 'pbkdf2:sha256:600000$BjKGdUgEm2b0ZcZJ$9950e36b8850858319e380fd51be2233a4d9d1edd13fdc00ceaab21a77b8ea96'
         }, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Logged in successfully!', response.get_data(as_text=True))
