@@ -3,6 +3,8 @@ from website import db, create_app
 from config import SQLALCHEMY_DATABASE_URI
 
 class TestInventory(unittest.TestCase):
+
+    @classmethod
     def setUpClass(cls):
         cls.app = create_app()
         cls.app.config['TESTING'] = True
