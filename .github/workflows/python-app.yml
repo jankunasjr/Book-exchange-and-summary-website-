@@ -86,7 +86,7 @@ jobs:
     - name: PyTest tests for Trades
       env:
         PYTHONPATH: ${{ github.workspace }}
-        ENABLE_LLM: False  # Disable LLM usage in GitHub 
+        ENABLE_LLM: False  
       run: |
         coverage run -m pytest website/tests/test_trades.py
 
