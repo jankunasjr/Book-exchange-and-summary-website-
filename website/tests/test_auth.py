@@ -57,7 +57,7 @@ class FlaskLoginTestCase(unittest.TestCase):
             'password1': 'password123',
             'password2': 'password123'
         }, follow_redirects=True)
-        self.assertIn("Username must be greater than 1 character.", response.get_data(as_text=True))
+        self.assertIn("Username must be greater than 1 character./n", response.get_data(as_text=True))
 
     def test_signup_password_too_short(self):
         response = self.client.post('/sign-up', data={
