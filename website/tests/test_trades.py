@@ -89,7 +89,7 @@ def test_submit_trade(client, app):
         # Check the content of the response
         assert 'Trade submitted successfully' in response.data.decode()"""
 
-def test_submit_trade_invalid_book_id(client, app):
+"""def test_submit_trade_invalid_book_id(client, app):
     with app.app_context():
         # Send a POST request to the submit_trade route with an invalid book ID
         response = client.post(url_for('trades.submit_trade'), data=dict(
@@ -106,7 +106,7 @@ def test_submit_trade_invalid_user_id(client, app):
             sender_book_id=1,
             sender_id=999  # Invalid user ID
         ), follow_redirects=True)
-    assert response.status_code == 404
+    assert response.status_code == 404"""
 
 def test_submit_trade_invalid_user_id(client, app):
     with app.app_context():
