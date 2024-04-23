@@ -78,7 +78,7 @@ jobs:
     - name: Test with unittest
       env:
         PYTHONPATH: ${{ github.workspace }}
-        ENABLE_LLM: False  # Disable LLM usage in GitHub 
+        ENABLE_LLM: False  
       run: |
         coverage run -m unittest discover -s website/tests -p test_prompts.py
 
