@@ -66,7 +66,7 @@ class FlaskLoginTestCase(unittest.TestCase):
             'password1': 'pw',
             'password2': 'pw'
         }, follow_redirects=True)
-        self.assertIn('Password must be at least 3 characters.', response.get_data(as_text=True))
+        self.assertIn('Password must be at least 8 characters.', response.get_data(as_text=True))
 
 if __name__ == '__main__':
     unittest.main()
