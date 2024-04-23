@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, jsonify
-from .models import Inventory, Reviews  # Assuming you have a Book model in your models.py file
+from flask import Blueprint, render_template, redirect, flash
+from .models import Inventory, Reviews
 from . import db
 from flask import request, redirect, url_for
 from datetime import datetime
@@ -25,10 +25,14 @@ def submit_review():
     rating = request.form.get('rating')
     book_title = request.form.get('bookTitle')
     review_text = request.form.get('reviewText')
-    user_id = request.form.get('userID')  # Get the user ID from the form data
+    user_id = request.form.get('userID')
 
-    # Validate the rating
+    if not rating:
+        flash('No rating selected.', category='error')
+        return redirect(url_for('inventory.show_inventory'))
+
     if not 1 <= int(rating) <= 5:
+        flash('Rating has to be  between 1 and 5.', category='error')
         return "Invalid rating. Rating should be between 1 and 5.", 400
 
     book = Inventory.query.filter(Inventory.Title.ilike(book_title)).first()
@@ -39,6 +43,7 @@ def submit_review():
             db.session.add(review)  # Add the new review to the session
             db.session.commit()  # Commit the changes
             print(f"Review for {book_title} added with rating {rating}")
+            flash('Review submitted.', category='success')
             return redirect(url_for('inventory.show_inventory')), 200  # Return a success status code
         except Exception as e:
             print(f"Error occurred: {e}")
