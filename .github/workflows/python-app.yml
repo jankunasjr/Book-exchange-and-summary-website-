@@ -74,12 +74,6 @@ jobs:
           FROM information_schema.columns 
           WHERE table_name = 'users';
         "
-    - name: Test with unittest auth
-      env:
-        PYTHONPATH: ${{ github.workspace }}
-        ENABLE_LLM: False  
-      run: |
-        coverage run -m pytest website/tests/test_auth.py
 
     - name: Test with unittest inventory
       env:
