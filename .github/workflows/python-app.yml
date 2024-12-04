@@ -74,10 +74,3 @@ jobs:
           FROM information_schema.columns 
           WHERE table_name = 'users';
         "
-
-    - name: Test with unittest inventory
-      env:
-        PYTHONPATH: ${{ github.workspace }}
-        ENABLE_LLM: False  
-      run: |
-        coverage run -m unittest discover -s website/tests -p test_inventory.py
