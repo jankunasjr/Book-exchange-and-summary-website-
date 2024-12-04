@@ -2,46 +2,35 @@ from flask import Blueprint, request, render_template, flash, session, redirect,
 from werkzeug.utils import secure_filename
 import os
 from .extensions import db
-from .models import Prompts, PromptMessages, UploadedFiles
+from .models import Prompts, PromptMessages, UploadedFiles, Users
 from datetime import datetime
 from langchain_community.llms import LlamaCpp
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from config import ollama_llm
-from pypdf import PdfReader
+from PyPDF2 import PdfReader
+from flask_login import current_user, login_required
 
 prompts_bp = Blueprint('prompts', __name__, template_folder='templates')
 ALLOWED_EXTENSIONS = {'txt', 'pdf'}
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Check environment variable to enable LLM
-if os.getenv("ENABLE_LLM", "False") == "True":
-    llm = LlamaCpp(model_path=ollama_llm, n_gpu_layers=60, n_batch=652, verbose=False)
-    prompt_template = PromptTemplate(template="Question: {question}\nAnswer:", input_variables=["question"])
-    llm_chain = LLMChain(prompt=prompt_template, llm=llm)
-else:
-    llm = None
-    llm_chain = None
+llm = LlamaCpp(model_path=ollama_llm, n_gpu_layers=60, n_batch=652, verbose=False)
+prompt_template = PromptTemplate(template="Question: {question}\nAnswer:", input_variables=["question"])
+llm_chain = LLMChain(prompt=prompt_template, llm=llm)
 
 
 @prompts_bp.route('/chat', methods=['GET', 'POST'])
+@login_required
 def chat():
-    user_id = 1  # Replace this with actual user logic
+    user_id = current_user.UserID # Replace this with actual user logic
     prompt_id = session.get('prompt_id')
 
     if request.method == 'POST':
         text_input = request.form.get('promptText', '').strip()
         file = request.files.get('fileInput')
         content_to_process = text_input  # Start with text input as the base content
-
-        if not text_input:
-            flash('Input cannot be empty', 'error')
-            return redirect(url_for('prompts.chat'))
-
-        if len(text_input) > 200:
-            flash('Input exceeds maximum length of 200 characters', 'error')
-            return redirect(url_for('prompts.chat'))  # Ensure this redirect is happening
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
@@ -64,22 +53,20 @@ def chat():
 
     messages = PromptMessages.query.filter_by(PromptID=prompt_id).order_by(
         PromptMessages.Timestamp).all() if prompt_id else []
-    return render_template('prompt.html', messages=messages,
+    return render_template('prompts.html', messages=messages,
                            prompts_with_names=Prompts.query.filter_by(UserID=user_id).all())
 
 
 def process_text_input(text, prompt_id):
-    if llm_chain:
-        response = llm_chain.run(question=text)
-        save_prompt_message(text, response, prompt_id)
+    response = llm_chain.run(question=text)
+    save_prompt_message(text, response, prompt_id)
 
 
 def process_file(path, filename, user_id, prompt_id):
-    if llm_chain:
-        content = read_file(path)
-        response = llm_chain.run(question=content)
-        save_file_record(filename, path, user_id, prompt_id)
-        save_prompt_message(content, response, prompt_id)
+    content = read_file(path)
+    response = llm_chain.run(question=content)
+    save_file_record(filename, path, user_id, prompt_id)
+    save_prompt_message(content, response, prompt_id)
 
 
 def read_file(path):

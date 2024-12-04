@@ -2,6 +2,7 @@ from website import create_app, db
 import unittest
 from config import SQLALCHEMY_DATABASE_URI
 
+
 class FlaskLoginTestCase(unittest.TestCase):
 
     @classmethod
@@ -28,12 +29,12 @@ class FlaskLoginTestCase(unittest.TestCase):
 
     def test_failed_login_incorrect_password(self):
         response = self.client.post('/login', data={'email': 'alice@example.com',
-            'password': 'w123456'}, follow_redirects=True)
+                                                    'password': 'w123456'}, follow_redirects=True)
         self.assertIn('Incorrect password, try again.', str(response.data))
 
     def test_failed_login_no_user(self):
         response = self.client.post('/login', data={'email': 'ww@gmail.com',
-            'password': 'w12345'}, follow_redirects=True)
+                                                    'password': 'w12345'}, follow_redirects=True)
         self.assertIn('Email does not exist.', str(response.data))
 
     def test_signup_page_on_get(self):
@@ -68,7 +69,6 @@ class FlaskLoginTestCase(unittest.TestCase):
         }, follow_redirects=True)
         self.assertIn('Password must be at least 8 characters.', response.get_data(as_text=True))
 
+
 if __name__ == '__main__':
     unittest.main()
-
-

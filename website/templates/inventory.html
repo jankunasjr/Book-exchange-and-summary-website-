@@ -4,6 +4,12 @@
 {% block content %}
     <div class="container mt-5">
         <h1 class="text-center mb-4">Inventory</h1>
+
+        <!-- Add Book Button -->
+        <div class="text-right mb-3">
+            <button class="btn btn-success" id="addBookButton">Add New Book</button>
+        </div>
+
         <div class="table-responsive">
             <table class="table table-striped table-hover" id="inventoryTable">
                 <thead class="thead-dark">
@@ -28,35 +34,41 @@
         </div>
     </div>
 
-    <div id="bookModal" class="modal">
+    <!-- Add Book Modal -->
+    <div id="addBookModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <div class="modal-left">
-                <img id="bookImage" src="" alt="Book Image">
-            </div>
-            <div class="modal-right">
-                <h2 id="bookTitle"></h2>
-                <p id="bookAuthor"></p>
-                <p id="bookDescription"></p>
-                <p id="bookRating"></p>
-                <form method="POST" action="/submit-review">
-                    <input type="hidden" id="bookTitleInput" name="bookTitle">
-                    <div class="rating">
-                        <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars">5 stars</label>
-                        <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars">4 stars</label>
-                        <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars">3 stars</label>
-                        <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars">2 stars</label>
-                        <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">1 star</label>
-                    </div>
-                    <textarea id="reviewText" name="reviewText" placeholder="Write your review here..."></textarea>
-                    <button type="submit" class="submit-button">Submit Review</button>
-                </form>
-            </div>
+            <form method="POST" action="/add-book">
+                <h2 class="text-center">Add New Book</h2>
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="author">Author:</label>
+                    <input type="text" id="author" name="author" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="genre">Genre:</label>
+                    <select id="genre" name="genre" class="form-control" required>
+                        <option value="Novel">Novel</option>
+                        <option value="Adventure">Adventure</option>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Science">Science</option>
+                        <option value="Crime/Horror">Crime/Horror</option>
+                        <option value="Poetry">Poetry</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="status">Available:</label>
+                    <input type="checkbox" id="status" name="status">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Add Book</button>
+            </form>
         </div>
     </div>
 
     <style>
-
         .modal {
             display: none;
             position: fixed;
@@ -66,7 +78,7 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgba(0, 0, 0, 0.4);
         }
 
         .modal-content {
@@ -74,106 +86,52 @@
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
-            display: flex;
+            width: 50%;
+            border-radius: 10px;
         }
 
-        .modal-left {
-            flex: 1;
+        .modal-content .form-group {
+            margin-bottom: 15px;
         }
 
-        .modal-right {
-            flex: 2;
-            padding-left: 20px;
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
         }
 
-        .submit-button:hover {
-            background-color: #45a049;
-        }
-
-        .rating {
-            unicode-bidi: bidi-override;
-            direction: rtl;
-        }
-        .rating > label {
-            display: inline-block;
-            padding: 30px;
-            margin: 0;
-            position: relative;
-            width: 1em;
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
             cursor: pointer;
-            color: #000;
         }
-        .rating > input {
-            display: none;
-        }
-        .rating > label:hover,
-        .rating > label:hover ~ label,
-        .rating > input:checked ~ label {
-            color: #ffc700;
-        }
-
     </style>
 
-    <!-- Include jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
     <script>
-        $(document).ready(function() {
-    $('.status-checkbox').change(function() {
-        console.log('Checkbox clicked');  // Add this line
-        var bookId = $(this).data('book-id');
-        var status = $(this).is(':checked');
-        $.ajax({
-            url: '/update-status',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ book_id: bookId, status: status }),
-            success: function(response) {
-                console.log(response.message);
-            },
-            error: function(response) {
-                console.log(response.responseJSON.message);
-            }
-        });
-    });
-});
-    </script>
+        // Modal functionality for Add Book
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('addBookModal');
+            const addBookButton = document.getElementById('addBookButton');
+            const closeModalButton = document.querySelector('#addBookModal .close');
 
-    <script>
-        function showBookDetails(title, author, genre, averageRating) {
-            document.getElementById('bookTitle').innerText = title;
-            document.getElementById('bookAuthor').innerText = author;
-            document.getElementById('bookDescription').innerText = genre;
-            document.getElementById('bookRating').innerText = averageRating ? `Average Rating: ${averageRating}` : 'No reviews yet';
+            // Open modal
+            addBookButton.addEventListener('click', () => {
+                modal.style.display = 'block';
+            });
 
-            var modal = document.getElementById("bookModal");
-            modal.style.display = "block";
+            // Close modal
+            closeModalButton.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
 
-            var span = document.getElementsByClassName("close")[0];
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
+            // Close modal on clicking outside
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
                 }
-            }
-        }
-
-        $(document).ready(function() {
-            $('#inventoryTable tbody tr').click(function() {
-                var title = $(this).find('td:nth-child(1)').text();
-                var author = $(this).find('td:nth-child(2)').text();
-                var genre = $(this).find('td:nth-child(3)').text();
-                var averageRating = $(this).data('average-rating');
-
-                // Set the bookTitle input field value
-                $('#bookTitleInput').val(title);
-
-                showBookDetails(title, author, genre, averageRating);
             });
         });
     </script>
-
 {% endblock %}

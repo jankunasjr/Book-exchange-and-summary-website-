@@ -10,8 +10,23 @@ from flask_login import UserMixin
 
 class UserRoleEnum(enum.Enum):
     Admin = "Admin"
-    Premium = "Premium"
     Regular = "Regular"
+
+
+class TransactionStatus(enum.Enum):
+    Pending = "Pending"
+    Accepted = "Accepted"
+    Completed = "Completed"
+    Cancelled = "Cancelled"
+
+
+class GenreType(enum.Enum):
+    Novel = "Novel"
+    Adventure = "Adventure"
+    Fiction = "Fiction"
+    Science = "Science"
+    CrimeHorror = "Crime/Horror"
+    Poetry = "Poetry"
 
 
 class Users(db.Model, UserMixin):
@@ -34,7 +49,7 @@ class Inventory(db.Model):
     OwnerID = db.Column(db.Integer, db.ForeignKey('users.UserID'))
     Title = db.Column(db.String)
     Author = db.Column(db.String)
-    Genre = db.Column(db.String)
+    Genre = db.Column(Enum(GenreType))
     Status = db.Column(db.Boolean, default=False)
     DeletedAt = db.Column(db.DateTime)
     CreatedAt = db.Column(db.DateTime)
@@ -83,7 +98,7 @@ class Transactions(db.Model):
     ReceiverID = db.Column(db.Integer, db.ForeignKey('users.UserID'))
     SenderID = db.Column(db.Integer, db.ForeignKey('users.UserID'))
     TransactionDate = db.Column(db.DateTime)
-    Status = db.Column(db.String)
+    Status = db.Column(Enum(TransactionStatus))
 
 
 class Reviews(db.Model):

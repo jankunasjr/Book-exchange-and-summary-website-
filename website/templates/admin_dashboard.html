@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Admin Panel</h1>
+    <p class="text-center">Welcome to the admin dashboard.</p>
+
+    <!-- Users Table -->
+    <h3 class="mt-4">Users</h3>
+    <table class="table table-bordered table-responsive" id="usersTable">
+        <thead>
+            <tr>
+                <th>UserID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.UserID }}</td>
+                <td>{{ user.Username }}</td>
+                <td>{{ user.Email }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin.update_table', table='users', id=user.UserID) }}" class="d-inline">
+                        <input type="text" name="username" value="{{ user.Username }}" required>
+                        <input type="email" name="email" value="{{ user.Email }}" required>
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.delete_record', table='users', id=user.UserID) }}" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Inventory Table -->
+    <h3 class="mt-4">Inventory</h3>
+    <table class="table table-bordered table-responsive" id="inventoryTable">
+        <thead>
+            <tr>
+                <th>BookID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in inventory %}
+            <tr>
+                <td>{{ book.BookID }}</td>
+                <td>{{ book.Title }}</td>
+                <td>{{ book.Author }}</td>
+                <td>{{ book.Genre }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin.update_table', table='inventory', id=book.BookID) }}" class="d-inline">
+                        <input type="text" name="title" value="{{ book.Title }}" required>
+                        <input type="text" name="author" value="{{ book.Author }}" required>
+                        <input type="text" name="genre" value="{{ book.Genre }}" required>
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.delete_record', table='inventory', id=book.BookID) }}" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Prompts Table -->
+    <h3 class="mt-4">Prompts</h3>
+    <table class="table table-bordered table-responsive" id="promptsTable">
+        <thead>
+            <tr>
+                <th>PromptID</th>
+                <th>Name</th>
+                <th>SubmissionDate</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prompt in prompts %}
+            <tr>
+                <td>{{ prompt.PromptID }}</td>
+                <td>{{ prompt.Name }}</td>
+                <td>{{ prompt.SubmissionDate }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin.update_table', table='prompts', id=prompt.PromptID) }}" class="d-inline">
+                        <input type="text" name="name" value="{{ prompt.Name }}" required>
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.delete_record', table='prompts', id=prompt.PromptID) }}" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Transactions Table -->
+    <h3 class="mt-4">Transactions</h3>
+    <table class="table table-bordered table-responsive" id="transactionsTable">
+        <thead>
+            <tr>
+                <th>TransactionID</th>
+                <th>SenderID</th>
+                <th>ReceiverID</th>
+                <th>TransactionDate</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.TransactionID }}</td>
+                <td>{{ transaction.SenderID }}</td>
+                <td>{{ transaction.ReceiverID }}</td>
+                <td>{{ transaction.TransactionDate }}</td>
+                <td>{{ transaction.Status }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin.update_table', table='transactions', id=transaction.TransactionID) }}" class="d-inline">
+                        <input type="text" name="status" value="{{ transaction.Status }}" required>
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.delete_record', table='transactions', id=transaction.TransactionID) }}" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Chat Messages Table -->
+    <h3 class="mt-4">Chat Messages</h3>
+    <table class="table table-bordered table-responsive" id="chatMessagesTable">
+        <thead>
+            <tr>
+                <th>MessageID</th>
+                <th>ChatID</th>
+                <th>UserID</th>
+                <th>MessageText</th>
+                <th>Timestamp</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for message in chat_messages %}
+            <tr>
+                <td>{{ message.MessageID }}</td>
+                <td>{{ message.ChatID }}</td>
+                <td>{{ message.UserID }}</td>
+                <td>{{ message.MessageText }}</td>
+                <td>{{ message.Timestamp }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin.update_table', table='chat_messages', id=message.MessageID) }}" class="d-inline">
+                        <input type="text" name="message_text" value="{{ message.MessageText }}" required>
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.delete_record', table='chat_messages', id=message.MessageID) }}" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- DataTables Scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="{{ url_for('static', filename='jquery.dataTables.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        $('#usersTable').DataTable();
+        $('#inventoryTable').DataTable();
+        $('#promptsTable').DataTable();
+        $('#transactionsTable').DataTable();
+        $('#chatMessagesTable').DataTable();
+    });
+</script>
+
+<style>
+    .table td, .table th {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .text-truncate {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .table-responsive {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+</style>
+{% endblock %}

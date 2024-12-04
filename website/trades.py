@@ -3,13 +3,15 @@ from .models import Inventory, Users, Transactions
 from sqlalchemy import join
 from . import db
 from datetime import datetime
+from flask_login import login_required, current_user
 
 trades = Blueprint('trades', __name__)
 
 
 @trades.route('/show-trades')
+@login_required
 def show_trades():
-    current_user_id = 2  # Get the user ID from the session
+    current_user_id = current_user.UserID  # Get the user ID from the session
     books = db.session.query(Inventory, Users).join(Users, Inventory.OwnerID == Users.UserID).filter(
         Inventory.Status == True, Inventory.OwnerID != current_user_id).all()
     incoming_trades = db.session.query(Transactions, Inventory.Title, Users.Username).join(Inventory,

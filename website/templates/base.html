@@ -60,7 +60,11 @@
             <a class="nav-item nav-link" id="your-books" href="/show-inventory">Your Books</a>
             <a class="nav-item nav-link" id="summary-generator" href="{{ url_for('prompts.chat') }}">Summary Generator</a>
             <a class="nav-item nav-link" id="book-trading" href="/show-trades">Book Trading</a>
+            <a class="nav-item nav-link" id="profile" href="/profile">Profile</a>
             <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+            {% if current_user.is_authenticated and current_user.UserRole == UserRoleEnum.Admin %}
+            <a class="nav-item nav-link" id="admin-panel" href="/admin">Admin Panel</a>
+            {% endif %}
         </div>
     </div>
 </nav>

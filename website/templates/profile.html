@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">User Profile</h1>
+        <div class="profile-container">
+            <form method="POST" action="{{ url_for('profile.show_profile') }}">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" class="form-control" value="{{ user.Username }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" class="form-control" value="{{ user.Email }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">New Password (optional):</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter new password">
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Update Profile</button>
+            </form>
+            <form method="GET" action="{{ url_for('profile.download_csv', table='users') }}">
+                <button type="submit" class="btn btn-secondary mt-3">Download User Data</button>
+            </form>
+            <form method="GET" action="{{ url_for('profile.download_csv', table='inventory') }}">
+                <button type="submit" class="btn btn-secondary mt-3">Download Inventory Data</button>
+            </form>
+            <form method="GET" action="{{ url_for('profile.download_csv', table='prompts') }}">
+                <button type="submit" class="btn btn-secondary mt-3">Download Prompts Data</button>
+            </form>
+            <form method="GET" action="{{ url_for('profile.download_csv', table='transactions') }}">
+                <button type="submit" class="btn btn-secondary mt-3">Download Transactions Data</button>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 10px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #6c757d;
+        }
+    </style>
+{% endblock %}
